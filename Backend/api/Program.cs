@@ -22,11 +22,7 @@ public static class Startup
 
         var app = builder.Build();
 
-<<<<<<< Updated upstream
-app.Run(); //Runs the app
-=======
         var server = new WebSocketServer("ws://0.0.0.0:8181");
->>>>>>> Stashed changes
 
         server.Start(ws =>
         {
