@@ -1,44 +1,57 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Net.Sockets;
+using System.Reflection;
+using System.Text.Json;
+using Fleck;
+using lib;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+namespace api;
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public static class Startup
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    public static void Main(string[] args)
+    {
+        Statup(args);
+        Console.ReadLine();
+    }
 
-app.UseHttpsRedirection();
+    public static void Statup(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+        var clientEventHandlers = builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+        var app = builder.Build();
 
-app.Run();
+<<<<<<< Updated upstream
+app.Run(); //Runs the app
+=======
+        var server = new WebSocketServer("ws://0.0.0.0:8181");
+>>>>>>> Stashed changes
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        server.Start(ws =>
+        {
+            ws.OnClose = () =>
+            {
+                StateService.RemoveConnection(ws);
+            };
+
+            ws.OnOpen = () =>
+            {
+                StateService.AddConnection(ws);
+            };
+
+            ws.OnMessage = async message =>
+            {
+                try
+                {
+                    await app.InvokeClientEventHandler(clientEventHandlers, ws, message);
+                }
+                catch (Exception e)
+                {
+                    GlobalExceptionHandler.Handle(e, ws, message);
+                }
+            };
+        });
+
+    }
 }
