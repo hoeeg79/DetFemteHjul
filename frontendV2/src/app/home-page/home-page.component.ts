@@ -20,5 +20,6 @@ export class HomePageComponent {
       messageToTranslate: this.toTranslate,
       fromLanguage: this.fromLanguage,
     }
+    this.state.ws.send(JSON.stringify(dto));
   }
 }
