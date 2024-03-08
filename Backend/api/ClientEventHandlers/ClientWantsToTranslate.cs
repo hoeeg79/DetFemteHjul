@@ -5,6 +5,8 @@ namespace api;
 
 public class ClientWantsToTranslateDto : BaseDto
 {
+    public string fromLanguage { get; set; }
+    public string toLanguage { get; set; }
     public string messageToTranslate { get; set; }
 }
 
