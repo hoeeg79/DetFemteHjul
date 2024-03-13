@@ -1,7 +1,9 @@
 ﻿using System.Threading.RateLimiting;
 using Fleck;
+using Service;
 
 namespace api;
+//Denne klasse burde have lagt i Service.
 
 public class WsWithMetaData(IWebSocketConnection connection)
 {
@@ -24,5 +26,10 @@ public static class StateService
     {
         return Connections.Remove(ws.ConnectionInfo.Id);
     }
-    
+
+    public static List<String> GetLanguages()
+    {
+        var languages = TranslatorService.getLanguages();
+        return languages;
+    }
 }

@@ -45,4 +45,9 @@ public class TranslatorService
         return await _translatorRepository.getTranslation(request);
         
     }
+
+    public static List<string> getLanguages()
+    {
+        
+    }
 }

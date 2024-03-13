@@ -41,6 +41,8 @@ public static class Startup
             ws.OnOpen = () =>
             {
                 StateService.AddConnection(ws);
+                var languages = StateService.GetLanguages();
+                ws.Send(languages);
             };
 
             ws.OnMessage = async message =>
