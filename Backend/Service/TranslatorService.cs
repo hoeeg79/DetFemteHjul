@@ -17,9 +17,17 @@ public class TranslatorService
         _translatorRepository = translatorRepository;
     }
 
-    public async Task<List<TranslatorDto>?> CreateMessageBody(string text)
+    public async Task<List<TranslatorDto>?> CreateMessageBody(string text, string toLanguage, string fromLanguage)
     {
-        string route = "/translate?api-version=3.0&to=fr";
+        string route = "";
+        if (fromLanguage != null)
+        {
+            route = "/translate?api-version=3.0&from=" + fromLanguage + "&to=" + toLanguage;
+        }
+        else
+        {
+            route = "/translate?api-version=3.0&to=" + toLanguage;
+        }
         object[] body = new object[]
         {
             new { Text = text }
