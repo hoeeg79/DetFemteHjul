@@ -20,9 +20,12 @@ public static class Startup
     public static void Statup(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        
         builder.Services.AddSingleton<TranslatorController>();
         builder.Services.AddSingleton<TranslatorService>();
         builder.Services.AddSingleton<TranslatorRepository>();
+        builder.Services.AddSingleton<LanguageRepository>();
+        builder.Services.AddSingleton<LanguageService>();
         builder.Services.AddHttpClient();
 
         var clientEventHandlers = builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
@@ -38,9 +41,18 @@ public static class Startup
                 StateService.RemoveConnection(ws);
             };
 
-            ws.OnOpen = () =>
+            ws.OnOpen = async () =>
             {
-                StateService.AddConnection(ws);
+                try
+                {
+                      StateService.AddConnection(ws);
+                                    var result = await app.Services.GetService<LanguageService>().getLanguages();
+                                    ws.Send(JsonSerializer.Serialize(result));
+                } catch(Exception e)
+                {
+                    GlobalExceptionHandler.Handle(e, ws, "fix this");
+                }
+              
             };
 
             ws.OnMessage = async message =>

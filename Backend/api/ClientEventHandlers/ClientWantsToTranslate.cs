@@ -21,7 +21,7 @@ public class ClientWantsToTranslate : BaseEventHandler<ClientWantsToTranslateDto
     }
     public override async Task Handle(ClientWantsToTranslateDto dto, IWebSocketConnection socket)
     {
-        var translate = await _translator.CreateMessageBody(dto.messageToTranslate);
+        var translate = await _translator.CreateMessageBody(dto.messageToTranslate, dto.toLanguage, dto.fromLanguage);
         var actualObject = translate.First();
         var actualactualObject = actualObject.translations.First();
         
