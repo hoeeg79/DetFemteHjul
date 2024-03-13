@@ -12,8 +12,8 @@
       <button class="btn btn-primary" style="margin-left: 5px">Mic</button>
 
       <label style="margin-right: 5px; margin-left: 5px">Translation Language:</label>
-      <select style="width: 150px">
-        <option [id]="chosenLanguage" *ngFor="let language of state.languages">{{language}}</option>
+      <select style="width: 150px" [(ngModel)]="chosenLanguage">
+        <option *ngFor="let language of state.languages">{{language}}</option>
       </select>
       <hr>
       <h3>Translation:</h3>

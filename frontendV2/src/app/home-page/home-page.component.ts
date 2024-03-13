@@ -9,14 +9,11 @@ import {interval} from "rxjs";
 })
 export class HomePageComponent {
   toTranslate?: string;
-  chosenLanguage?: string;
+  chosenLanguage?: string = "Afrikaans";
   fromLanguage?: string;
   constructor(public state: StateService) {}
 
   onTranlate() {
-    if (!this.fromLanguage){
-      this.fromLanguage = "NoLanguageSelected";
-    }
     let languageCode;
     console.log(this.chosenLanguage);
     for (let i = 0; i < this.state.languages!.length; i++) {
@@ -29,7 +26,7 @@ export class HomePageComponent {
     var dto = {
       eventType: "ClientWantsToTranslate",
       messageToTranslate: this.toTranslate,
-      chosenLanguage: languageCode,
+      toLanguage: languageCode,
       fromLanguage: this.fromLanguage,
     }
     this.state.ws.send(JSON.stringify(dto));
