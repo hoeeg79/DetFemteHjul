@@ -27,9 +27,5 @@ public static class StateService
         return Connections.Remove(ws.ConnectionInfo.Id);
     }
 
-    public static List<String> GetLanguages()
-    {
-        var languages = TranslatorService.getLanguages();
-        return languages;
-    }
+ 
 }
