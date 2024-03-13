@@ -1,8 +1,11 @@
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text.Json;
+using api.Controller;
 using Fleck;
+using Infrastructure.Repositories;
 using lib;
+using Service;
 
 namespace api;
 
@@ -17,11 +20,15 @@ public static class Startup
     public static void Statup(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddSingleton<TranslatorController>();
+        builder.Services.AddSingleton<TranslatorService>();
+        builder.Services.AddSingleton<TranslatorRepository>();
+        builder.Services.AddHttpClient();
 
         var clientEventHandlers = builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
 
         var app = builder.Build();
-
+    
         var server = new WebSocketServer("ws://0.0.0.0:8181");
 
         server.Start(ws =>

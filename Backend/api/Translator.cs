@@ -1,16 +1,14 @@
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api;
 
 public class Translator
 {
     private static readonly string key = Environment.GetEnvironmentVariable("API_KEY_TRANSLATOR")!;
-    private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com";
-
-    // location, also known as region.
-    // required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
-    private static readonly string location = "North Europe";
+    private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com/";
+    private static readonly string location = "northeurope";
 
     public static async Task<String> TranslateText(string text)
     {
