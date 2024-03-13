@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseDto, ServerBroadcastTranslatedTextDto } from './BaseDto';
+import {BaseDto, ServerBroadcastTranslatedTextDto, ServerGivesLanguagesDto} from './BaseDto';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +8,8 @@ export class StateService {
 
   translation?: string;
   language?: string;
+  languages?: string[];
+  code?: string[];
   ws: WebSocket = new WebSocket('ws://localhost:8181');
   constructor() {    this.ws.onmessage = message => {
     const messageFromServer = JSON.parse(message.data) as BaseDto<any>
@@ -19,5 +21,10 @@ export class StateService {
   ServerBroadcastTranslatedText(dto: ServerBroadcastTranslatedTextDto) {
     this.translation = dto.translation;
     this.language = dto.language;
+  }
+
+  ServerGivesLanguages(dto: ServerGivesLanguagesDto) {
+    this.languages = dto.language;
+    this.code = dto.code;
   }
 }

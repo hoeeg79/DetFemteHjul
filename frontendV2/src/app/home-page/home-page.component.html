@@ -1,18 +1,24 @@
 <div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <h1>Translator6.9</h1>
-            <h6 style="font-style: italic">With hookers and blackjack! and forget about the hookers</h6>
-            <hr>
-            <label for="toTranslate">What do you want to translate?</label>
-            <br>
-            <textarea name="toTranslate" id="toTranslate" cols="50" rows="2" [(ngModel)]="toTranslate"></textarea>
-            <br>
-            <button class="btn btn-primary" (click)="onTranlate()" [disabled]="!toTranslate">Translate</button>
-            <hr>
-            <h3>Translation:</h3>
-            <p>{{state.translation}}</p>
-        </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Translator6.9</h1>
+      <h6 style="font-style: italic">With hookers and blackjack! and forget about the hookers</h6>
+      <hr>
+      <label for="toTranslate">What do you want to translate?</label>
+      <br>
+      <textarea name="toTranslate" id="toTranslate" cols="50" rows="2" [(ngModel)]="toTranslate"></textarea>
+      <br>
+      <button class="btn btn-primary" (click)="onTranlate()" [disabled]="!toTranslate">Translate</button>
+      <button class="btn btn-primary" style="margin-left: 5px">Mic</button>
+
+      <label style="margin-right: 5px; margin-left: 5px">Translation Language:</label>
+      <select style="width: 150px" [(ngModel)]="chosenLanguage">
+        <option *ngFor="let language of state.languages">{{language}}</option>
+      </select>
+      <hr>
+      <h3>Translation:</h3>
+      <p>{{ state.translation }}</p>
     </div>
+  </div>
 </div>
 

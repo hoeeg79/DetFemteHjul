@@ -20,7 +20,7 @@ public static class Startup
     public static void Statup(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         builder.Services.AddSingleton<TranslatorController>();
         builder.Services.AddSingleton<TranslatorService>();
         builder.Services.AddSingleton<TranslatorRepository>();
@@ -31,28 +31,31 @@ public static class Startup
         var clientEventHandlers = builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
 
         var app = builder.Build();
-    
+
         var server = new WebSocketServer("ws://0.0.0.0:8181");
 
         server.Start(ws =>
         {
-            ws.OnClose = () =>
-            {
-                StateService.RemoveConnection(ws);
-            };
+            ws.OnClose = () => { StateService.RemoveConnection(ws); };
 
             ws.OnOpen = async () =>
             {
                 try
                 {
-                      StateService.AddConnection(ws);
-                                    var result = await app.Services.GetService<LanguageService>().getLanguages();
-                                    ws.Send(JsonSerializer.Serialize(result));
-                } catch(Exception e)
+                    StateService.AddConnection(ws);
+                    var result = await app.Services.GetService<LanguageService>().getLanguages();
+                    var response = new ServerGivesLanguages()
+                    {
+                        language = result["language"],
+                        code = result["code"]
+                    };
+                    Console.WriteLine(JsonSerializer.Serialize(response));
+                    ws.Send(JsonSerializer.Serialize(response));
+                }
+                catch (Exception e)
                 {
                     GlobalExceptionHandler.Handle(e, ws, "fix this");
                 }
-              
             };
 
             ws.OnMessage = async message =>
@@ -67,6 +70,5 @@ public static class Startup
                 }
             };
         });
-
     }
 }
