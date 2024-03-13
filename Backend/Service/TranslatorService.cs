@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Newtonsoft.Json;
 
@@ -16,9 +17,9 @@ public class TranslatorService
         _translatorRepository = translatorRepository;
     }
 
-    public string CreateMessageBody(string text)
+    public async Task<List<TranslatorDto>?> CreateMessageBody(string text)
     {
-        string route = "/translate?api-version=3.0&from=en&to=fr&to=zu";
+        string route = "/translate?api-version=3.0&to=fr";
         object[] body = new object[]
         {
             new { Text = text }
@@ -33,7 +34,7 @@ public class TranslatorService
         request.Headers.Add("Ocp-Apim-Subscription-Key", key);
         // location required if you're using a multi-service or regional (not global) resource.
         request.Headers.Add("Ocp-Apim-Subscription-Region", location);
-        var response = _translatorRepository.getTranslation(request).Result;
-        return response;
+        return await _translatorRepository.getTranslation(request);
+        
     }
 }

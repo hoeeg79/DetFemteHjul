@@ -16,6 +16,6 @@ public class TranslatorController : ControllerBase
     [Route("/translator")]
     public string GetTranslation(string text)
     {
-        return _translatorService.CreateMessageBody(text);
+        return "";
     }
 }

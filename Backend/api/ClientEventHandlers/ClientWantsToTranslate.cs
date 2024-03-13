@@ -1,5 +1,7 @@
-﻿using Fleck;
+﻿using System.Text.Json;
+using Fleck;
 using lib;
+using Service;
 
 namespace api;
 
@@ -12,11 +14,24 @@ public class ClientWantsToTranslateDto : BaseDto
 
 public class ClientWantsToTranslate : BaseEventHandler<ClientWantsToTranslateDto>
 {
-    public override Task Handle(ClientWantsToTranslateDto dto, IWebSocketConnection socket)
+    private readonly TranslatorService _translator;
+    public ClientWantsToTranslate(TranslatorService translator)
     {
+        _translator = translator;
+    }
+    public override async Task Handle(ClientWantsToTranslateDto dto, IWebSocketConnection socket)
+    {
+        var translate = await _translator.CreateMessageBody(dto.messageToTranslate);
+        var actualObject = translate.First();
+        var actualactualObject = actualObject.translations.First();
         
+        var newTranslation = new ServerBroadcastTranslatedText()
+        {
+            translation = actualactualObject.text,
+            language = actualactualObject.to
+        };
+
+        socket.Send(JsonSerializer.Serialize(newTranslation));
         
-        
-        return Task.CompletedTask;
     }
 }

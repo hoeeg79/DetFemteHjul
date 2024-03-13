@@ -1,3 +1,7 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Infrastructure.Models;
+
 namespace Infrastructure.Repositories;
 
 public class TranslatorRepository
@@ -9,11 +13,12 @@ public class TranslatorRepository
         _http = http;
     }
     
-    public async Task<String> getTranslation(HttpRequestMessage request)
+    public async Task<List<TranslatorDto>?> getTranslation(HttpRequestMessage request)
     {
-        var json = await _http.SendAsync(request).ConfigureAwait(false);
-        Console.WriteLine(json.Content.ReadAsStringAsync());
-        return await json.Content.ReadAsStringAsync();
-        
+        var json = _http.SendAsync(request).Result;
+        Console.WriteLine("HER ER FEJLEN måske" + json.Content);
+        var str = await json.Content.ReadAsStringAsync();
+        var o = JsonSerializer.Deserialize<List<TranslatorDto>>(str);
+        return o;
     }
 }

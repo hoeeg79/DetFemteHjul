@@ -7,7 +7,7 @@ namespace api;
 public class Translator
 {
     private static readonly string key = Environment.GetEnvironmentVariable("API_KEY_TRANSLATOR")!;
-    private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com/";
+    private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com";
     private static readonly string location = "northeurope";
 
     public static async Task<String> TranslateText(string text)

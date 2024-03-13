@@ -16,9 +16,10 @@ public class Tests
     }
 
     [Test]
-    public void Test1()
+    public async Task Test1()
     {
         var obj = _translatorController.GetTranslation("How do you do?");
+        Console.WriteLine(obj);
         StringAssert.Contains("Comment vas-tu?", obj);
     }
 
