@@ -49,7 +49,6 @@ public static class Startup
                         language = result["language"],
                         code = result["code"]
                     };
-                    Console.WriteLine(JsonSerializer.Serialize(response));
                     ws.Send(JsonSerializer.Serialize(response));
                 }
                 catch (Exception e)
