@@ -15,6 +15,8 @@ export class HomePageComponent {
   constructor(public state: StateService) {}
 
   onTranlate() {
+    console.log(this.chosenLanguage)
+    console.log(this.fromLanguage)
     this.findLanguageCode()
     var dto = {
       eventType: "ClientWantsToTranslate",

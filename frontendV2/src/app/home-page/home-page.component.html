@@ -10,11 +10,11 @@
       <br>
       <label style="margin-right: 5px; margin-left: 0px">Translate from:</label>
       <select style="width: 150px" [(ngModel)]="fromLanguage">
-        <option *ngFor="let language of state.languages">{{ language }}</option>
+        <option [value]="language" *ngFor="let language of state.fromLanguages">{{ language }}</option>
       </select>
       <label style="margin-right: 5px; margin-left: 5px">Translate to:</label>
       <select style="width: 150px" [(ngModel)]="chosenLanguage">
-        <option *ngFor="let language of state.languages">{{ language }}</option>
+        <option [value]="language" *ngFor="let language of state.languages">{{ language }}</option>
       </select>
       <br>
       <div style="margin-top: 7px">
