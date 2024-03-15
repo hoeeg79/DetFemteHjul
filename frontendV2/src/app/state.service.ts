@@ -9,6 +9,8 @@ export class StateService {
   translation?: string;
   language?: string;
   languages?: string[];
+  fromLanguagesTemp: string[] = ["Detect Language"];
+  fromLanguages?: string[];
   code?: string[];
   ws: WebSocket = new WebSocket('ws://localhost:8181');
   constructor() {    this.ws.onmessage = message => {
@@ -25,6 +27,7 @@ export class StateService {
 
   ServerGivesLanguages(dto: ServerGivesLanguagesDto) {
     this.languages = dto.language;
+    this.fromLanguages = this.fromLanguagesTemp!.concat(dto.language!);
     this.code = dto.code;
   }
 }

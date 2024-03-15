@@ -6,15 +6,21 @@
       <hr>
       <label for="toTranslate">What do you want to translate?</label>
       <br>
-      <textarea name="toTranslate" id="toTranslate" cols="50" rows="2" [(ngModel)]="toTranslate"></textarea>
+      <textarea name="toTranslate" id="toTranslate" cols="58" rows="2" [(ngModel)]="toTranslate"></textarea>
       <br>
-      <button class="btn btn-primary" (click)="onTranlate()" [disabled]="!toTranslate">Translate</button>
-      <button class="btn btn-primary" style="margin-left: 5px">Mic</button>
-
-      <label style="margin-right: 5px; margin-left: 5px">Translation Language:</label>
-      <select style="width: 150px" [(ngModel)]="chosenLanguage">
-        <option *ngFor="let language of state.languages">{{language}}</option>
+      <label style="margin-right: 5px; margin-left: 0px">Translate from:</label>
+      <select style="width: 150px" [(ngModel)]="fromLanguage">
+        <option *ngFor="let language of state.languages">{{ language }}</option>
       </select>
+      <label style="margin-right: 5px; margin-left: 5px">Translate to:</label>
+      <select style="width: 150px" [(ngModel)]="chosenLanguage">
+        <option *ngFor="let language of state.languages">{{ language }}</option>
+      </select>
+      <br>
+      <div style="margin-top: 7px">
+        <button class="btn btn-primary" (click)="onTranlate()" [disabled]="!toTranslate">Translate</button>
+        <button class="btn btn-primary" style="margin-left: 5px">Microphone</button>
+      </div>
       <hr>
       <h3>Translation:</h3>
       <p>{{ state.translation }}</p>

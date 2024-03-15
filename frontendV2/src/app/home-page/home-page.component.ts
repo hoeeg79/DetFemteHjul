@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { StateService } from '../state.service';
-import {interval} from "rxjs";
 
 @Component({
   selector: 'app-home-page',
@@ -11,24 +10,32 @@ export class HomePageComponent {
   toTranslate?: string;
   chosenLanguage?: string = "Afrikaans";
   fromLanguage?: string;
+  fromLanguageCode?: string;
+  languageCode?: string;
   constructor(public state: StateService) {}
 
   onTranlate() {
-    let languageCode;
-    console.log(this.chosenLanguage);
-    for (let i = 0; i < this.state.languages!.length; i++) {
-      console.log(this.state.languages![i]);
-      if (this.state.languages![i] === this.chosenLanguage){
-        languageCode = this.state.code![i];
-        break
-      }
-    }
+    this.findLanguageCode()
     var dto = {
       eventType: "ClientWantsToTranslate",
       messageToTranslate: this.toTranslate,
-      toLanguage: languageCode,
-      fromLanguage: this.fromLanguage,
+      toLanguage: this.languageCode,
+      fromLanguage: this.fromLanguageCode,
     }
     this.state.ws.send(JSON.stringify(dto));
+  }
+  findLanguageCode(){
+    for (let i = 0; i < this.state.languages!.length; i++) {
+      if (this.state.languages![i] === this.chosenLanguage){
+        this.languageCode = this.state.code![i];
+        break
+      }
+    }
+    for (let i = 0; i < this.state.fromLanguages!.length; i++) {
+      if (this.state.fromLanguages![i] === this.fromLanguage){
+        this.fromLanguageCode = this.state.code![i];
+        break
+      }
+    }
   }
 }
