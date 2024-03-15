@@ -3,6 +3,7 @@ using System.Text;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Newtonsoft.Json;
+using HttpRequestMessage = System.Net.Http.HttpRequestMessage;
 
 namespace Service;
 
@@ -68,7 +69,6 @@ public class SpeechToTextService
             { "pa", "IN" },
             { "pl", "PL" },
             { "ps", "AF" },
-            { "pt", "BR" },
             { "pt", "PT" },
             { "ro", "RO" },
             { "ru", "RU" },
@@ -80,7 +80,6 @@ public class SpeechToTextService
             { "sr", "RS" },
             { "sv", "SE" },
             { "sw", "KE" },
-            { "sw", "TZ" },
             { "ta", "IN" },
             { "te", "IN" },
             { "th", "TH" },
@@ -95,32 +94,22 @@ public class SpeechToTextService
             { "zu", "ZA" }
         };
     
-    // Your audio file path
-    string audioFilePath = "path/to/your/audio/file.wav";
-
-    // Read the audio file into a byte array
-    byte[] audioBytes = File.ReadAllBytes(audioFilePath);
-
-    // Convert the byte array to Base64 string (if required by the API)
-    string base64Audio = Convert.ToBase64String(audioBytes);
-    
-    
     public SpeechToTextService(SpeechToTextRepository speechToTextRepository)
     {
         _speechToTextRepository = speechToTextRepository;
     }
 
-    public async Task<SpeechToTextDto> CreateMessageBody(string fromLanguage)
+    public async Task<SpeechToTextDto> CreateMessageBody(string? fromLanguage, string base64Audio)
     {
         
         string route = "";
         if (fromLanguage != null)
         {
-            string route = "speech/recognition/conversation/cognitiveservices/v1?language=" + fromLanguage + "-" + languageToCountry[fromLanguage] + "&format=detailed";
+            route = "speech/recognition/conversation/cognitiveservices/v1?language=" + fromLanguage + "-" + languageToCountry[fromLanguage] + "&format=detailed";
         }
         else
         {
-            string route = "speech/recognition/conversation/cognitiveservices/v1?language=en-AU&format=detailed";
+            route = "speech/recognition/conversation/cognitiveservices/v1?language=en-AU&format=detailed";
         }
         
         object[] body = new object[]
@@ -135,8 +124,7 @@ public class SpeechToTextService
         request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
         request.Headers.Add("Ocp-Apim-Subscription-Key", key);
         // location required if you're using a multi-service or regional (not global) resource.
-        request.Headers.Add("Ocp-Apim-Subscription-Region", location);
-        
+        request.Headers.Add("Ocp-Apim-Subscription-Region", "northeurope");
         return await _speechToTextRepository.GetSpeechToText(request);
     }
 }

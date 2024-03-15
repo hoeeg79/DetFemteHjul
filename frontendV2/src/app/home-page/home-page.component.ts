@@ -42,6 +42,15 @@ export class HomePageComponent {
     }
   }
 
+  sentBlobToWs(byteArray: Uint8Array) {
+    var dto = {
+      "eventType": "ClientWantsToTranslateAudio",
+      "audioToTranslate": byteArray,
+      "toLanguage": this.languageCode,
+      "fromLanguage": this.fromLanguageCode,
+    };
+    this.state.ws.send(JSON.stringify(dto));
+  }
   async onMicrophone() {
     try {
       this.findLanguageCode();
@@ -55,32 +64,32 @@ export class HomePageComponent {
 
       mediaRecorder.addEventListener("stop", () => {
         const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        // Now you have the audioBlob containing the recorded audio.
         console.log("audioBlob: ", audioBlob);
-        // Send the audioBlob to your WebSocket server.
-        let byteArray: Uint8Array;
         const reader = new FileReader();
-        reader.onload = function(event) {
-          const arrayBuffer = event.target!.result as ArrayBuffer;
-          byteArray = new Uint8Array(arrayBuffer);
-          console.log(byteArray)
-          return byteArray;
+        reader.onload = (event) => { // Changed to arrow function
+          const base64String = event.target!.result as string;
+          console.log(base64String)
+          var dto = {
+            "eventType": "ClientWantsToTranslateAudio",
+            "audioToTranslate": base64String,
+            "toLanguage": this.languageCode,
+            "fromLanguage": this.fromLanguageCode,
+          };
+          this.state.ws.send(JSON.stringify(dto));
         };
-        reader.readAsArrayBuffer(audioBlob);
-        console.log("byteArray: ", byteArray!);
-
+        reader.readAsDataURL(audioBlob); // Changed to readAsDataURL
       });
 
-      // Start recording.
       mediaRecorder.start();
 
-      // Stop recording after 5 seconds (adjust as needed).
       setTimeout(() => {
         mediaRecorder.stop();
-      }, 6500);
+      }, 2000);
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
+
+
     /*navigator.mediaDevices.getUserMedia({audio: true})
       .then(stream => {
         const mediaRecorder = new MediaRecorder(stream);

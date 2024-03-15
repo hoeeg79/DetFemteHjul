@@ -21,10 +21,12 @@ public static class Startup
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddSingleton<TranslatorController>();
-        builder.Services.AddSingleton<TranslatorService>();
         builder.Services.AddSingleton<TranslatorRepository>();
         builder.Services.AddSingleton<LanguageRepository>();
+        builder.Services.AddSingleton<SpeechToTextRepository>();
+        
+        builder.Services.AddSingleton<SpeechToTextService>();
+        builder.Services.AddSingleton<TranslatorService>();
         builder.Services.AddSingleton<LanguageService>();
         builder.Services.AddHttpClient();
 

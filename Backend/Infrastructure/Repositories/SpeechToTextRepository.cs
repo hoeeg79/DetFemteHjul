@@ -18,6 +18,7 @@ public class SpeechToTextRepository
         var json = _http.SendAsync(request).Result;
         var str = await json.Content.ReadAsStringAsync();
         var o = JsonSerializer.Deserialize<SpeechToTextDto>(str);
+        Console.WriteLine("Repo" + str);
         return o;
     }
 }
